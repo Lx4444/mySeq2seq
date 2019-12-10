@@ -1,5 +1,5 @@
 from load_data import *
-input_lang,output_lang,pairs=prepare_data('eng','fra',True)
+input_lang,output_lang,pairs=prepare_data('en','vi',True)
 print(random.choice(pairs))
 
 class EncoderRNN(nn.Module):

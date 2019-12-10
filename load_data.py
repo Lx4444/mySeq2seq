@@ -52,12 +52,21 @@ def normalize_string(s):
 def read_langs(lang1,lang2,reverse=False):
     print('Reading lines...')
     
-    lines=open('data/data/%s-%s.txt'%(lang1,lang2),encoding='utf-8').read().strip().split('\n')
+    #lines=open('data/data/%s-%s.txt'%(lang1,lang2),encoding='utf-8').read().strip().split('\n')
 
-    lines_en=open('en_vidata/train.en')
-    lines_vi=open('en_vidata/train.vi')
+    lines_en=open('en_vidata/train.en',encoding='utf-8')
+    lines_vi=open('en_vidata/train.vi',encoding='utf-8')
+    lines_en=lines_en.readlines()
+    lines_vi=lines_vi.readlines()
+    pairs=[]
+    for i in range(len(lines_en)):
+        tmp_pair=[]
+        tmp_pair.append(lines_en[i][:-1])
+        tmp_pair.append(lines_vi[i][:-1])
+        pairs.append(tmp_pair)
 
-    pairs=[[normalize_string(s) for s in l.split('\t')] for l in lines_en]
+
+    #pairs=[[normalize_string(s) for s in l.split('\t')] for l in lines_en]
 
     if reverse:
         pairs=[list(reversed(p)) for p in pairs]
@@ -71,7 +80,7 @@ def read_langs(lang1,lang2,reverse=False):
 
 
 
-MAX_LENGTH = 10
+MAX_LENGTH = 50
 eng_prefixes=('i am ','i m ',
     "he is", "he s ",
     "she is", "she s ",
@@ -81,10 +90,12 @@ eng_prefixes=('i am ','i m ',
 )
 
 def filter_pair(p):
-    return len(p[0].split(' '))<MAX_LENGTH and \
+    return True
+
+    '''return len(p[0].split(' '))<MAX_LENGTH and \
         len(p[1].split(' '))<MAX_LENGTH and \
         p[1].startswith(eng_prefixes)
-
+'''
 def filter_pairs(pairs):
     return [pair for pair in pairs if filter_pair(pair)]
 
@@ -92,7 +103,6 @@ def filter_pairs(pairs):
 
 def prepare_data(lang1,lang2,reverse=False):
     input_lang,output_lang,pairs=read_langs(lang1,lang2,reverse)
-
     print('Read %s sentence pairs' % len(pairs))
     pairs=filter_pairs(pairs)
     print('Trimmed to %s sentence pairs' %len(pairs))
@@ -109,7 +119,7 @@ def prepare_data(lang1,lang2,reverse=False):
 
 
 if __name__ == "__main__":
-    input_lang,output_lang,pairs=prepare_data('eng','fra',True)
-    #print(random.choice(pairs))
+    input_lang,output_lang,pairs=prepare_data('en','vi',True)
+    print(random.choice(pairs))
 
 
