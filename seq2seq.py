@@ -1,6 +1,7 @@
 from load_data import *
 input_lang,output_lang,pairs=prepare_data('en','vi',True)
 print(random.choice(pairs))
+#test git
 
 class EncoderRNN(nn.Module):
     def __init__(self,input_size,hidden_size):
